@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Arrest Scam Detector — Test Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#f0fdf4',
+              500: '#22c55e',
+              600: '#16a34a',
+              900: '#14532d',
+            },
+            danger: {
+              500: '#ef4444',
+              600: '#dc2626',
+            },
+            warning: {
+              500: '#f59e0b',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #0f172a;
+      color: #f8fafc;
+    }
+    .glass-card {
+      background: rgba(30, 41, 59, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .glass-card-hover:hover {
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+    .tab-active {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white;
+      box-shadow: 0 4px 14px 0 rgba(37, 99, 235, 0.39);
+    }
+    .tier-CRITICAL { color: #ef4444; border-color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+    .tier-HIGH { color: #f97316; border-color: #f97316; background: rgba(249, 115, 22, 0.1); }
+    .tier-MEDIUM { color: #eab308; border-color: #eab308; background: rgba(234, 179, 8, 0.1); }
+    .tier-LOW { color: #22c55e; border-color: #22c55e; background: rgba(34, 197, 94, 0.1); }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased bg-slate-950 text-slate-100">
+
+  <!-- Top Header -->
+  <header class="border-b border-slate-800 bg-slate-900/80 sticky top-0 z-50 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-xl shadow-lg shadow-blue-500/30">
+          🛡️
+        </div>
+        <div>
+          <h1 class="text-lg font-bold bg-gradient-to-r from-white via-slate-200 to-blue-400 bg-clip-text text-transparent">
+            Digital Arrest Scam Detector
+          </h1>
+          <p class="text-xs text-slate-400">Backend Verification & Demo Testing Console</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span>
+          Backend API Connected
+        </span>
+        <a href="/docs" target="_blank" class="text-xs font-mono px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-blue-400 border border-slate-700 transition">
+          Swagger OpenAPI ↗
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Navigation Tabs -->
+  <div class="border-b border-slate-800 bg-slate-900/40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="flex space-x-2 py-3 overflow-x-auto no-scrollbar" id="tab-nav">
+        <button onclick="switchTab('tab-scanner')" id="btn-tab-scanner" class="tab-btn tab-active px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center gap-2 whitespace-nowrap">
+          🔍 Scam Scanner
+        </button>
+        <button onclick="switchTab('tab-scammer')" id="btn-tab-scammer" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition flex items-center gap-2 whitespace-nowrap">
+          📱 Scammer DB
+        </button>
+        <button onclick="switchTab('tab-deepfake')" id="btn-tab-deepfake" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition flex items-center gap-2 whitespace-nowrap">
+          🎥 Deepfake Check
+        </button>
+        <button onclick="switchTab('tab-ncrb')" id="btn-tab-ncrb" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition flex items-center gap-2 whitespace-nowrap">
+          📋 NCRB Complaint
+        </button>
+        <button onclick="switchTab('tab-community')" id="btn-tab-community" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition flex items-center gap-2 whitespace-nowrap">
+          👥 Community & Clusters
+        </button>
+        <button onclick="switchTab('tab-helpline')" id="btn-tab-helpline" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition flex items-center gap-2 whitespace-nowrap">
+          📞 Helplines & Safety
+        </button>
+        <button onclick="switchTab('tab-analytics')" id="btn-tab-analytics" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 transition flex items-center gap-2 whitespace-nowrap">
+          📊 Analytics Dashboard
+        </button>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main Content Container -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+    <!-- 1. SCAM SCANNER TAB -->
+    <div id="tab-scanner" class="tab-content space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Input Section -->
+        <div class="lg:col-span-6 space-y-4">
+          <div class="glass-card rounded-2xl p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-base font-bold flex items-center gap-2">
+                <span>💬 Input Analysis Test</span>
+              </h2>
+              <div class="flex bg-slate-900 rounded-lg p-1 border border-slate-800">
+                <button onclick="setAnalysisType('message')" id="type-btn-message" class="px-3 py-1 text-xs rounded-md font-semibold bg-blue-600 text-white">Message</button>
+                <button onclick="setAnalysisType('call')" id="type-btn-call" class="px-3 py-1 text-xs rounded-md font-semibold text-slate-400 hover:text-white">Call Description</button>
+              </div>
+            </div>
+
+            <!-- Preset Buttons for Quick Testing -->
+            <div class="mb-3">
+              <span class="text-xs text-slate-400 block mb-1.5 font-medium">Quick Test Sample Inputs:</span>
+              <div class="flex flex-wrap gap-2">
+                <button onclick="loadSample('critical_cbi')" class="text-xs px-2.5 py-1 rounded bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20 transition">🚨 Critical CBI Scam</button>
+                <button onclick="loadSample('critical_hindi')" class="text-xs px-2.5 py-1 rounded bg-orange-500/10 text-orange-400 hover:bg-orange-500/20 border border-orange-500/20 transition">🇮🇳 Hindi ED Threat</button>
+                <button onclick="loadSample('customs')" class="text-xs px-2.5 py-1 rounded bg-yellow-500/10 text-yellow-400 hover:bg-yellow-500/20 border border-yellow-500/20 transition">📦 Customs Parcel Scam</button>
+                <button onclick="loadSample('safe')" class="text-xs px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20 transition">✅ Safe Normal Text</button>
+              </div>
+            </div>
+
+            <form id="scanner-form" onsubmit="runScan(event)" class="space-y-4">
+              <div>
+                <textarea id="scan-input" rows="6" required class="w-full bg-slate-900/90 border border-slate-700/80 rounded-xl p-3.5 text-sm text-slate-100 placeholder-slate-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition font-sans" placeholder="Paste forwarded message or describe a suspicious video/audio call..."></textarea>
+              </div>
+              <div class="flex items-center justify-between">
+                <input type="text" id="scan-user-id" value="demo_web_user" class="bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-300 w-36 font-mono" placeholder="user_id">
+                <button type="submit" id="scan-submit-btn" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold text-sm shadow-lg shadow-blue-500/25 transition flex items-center gap-2">
+                  <span>Run Analysis</span>
+                  <span id="scan-spinner" class="hidden animate-spin">⚡</span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Output Section -->
+        <div class="lg:col-span-6">
+          <div class="glass-card rounded-2xl p-6 min-h-[380px] flex flex-col" id="scan-result-card">
+            <div id="scan-empty" class="my-auto text-center py-12 text-slate-500">
+              <div class="text-4xl mb-3">🛡️</div>
+              <p class="text-sm">Submit a message above to see real-time risk score, rule overrides, and AI explanations.</p>
+            </div>
+
+            <div id="scan-output" class="hidden space-y-4">
+              <!-- Score & Tier Banner -->
+              <div class="flex items-center justify-between p-4 rounded-xl border" id="tier-banner">
+                <div>
+                  <span class="text-xs uppercase tracking-wider font-bold block" id="result-tier-label">RISK TIER</span>
+                  <span class="text-2xl font-extrabold" id="result-tier">CRITICAL</span>
+                </div>
+                <div class="text-right">
+                  <span class="text-3xl font-black font-mono" id="result-score">95</span>
+                  <span class="text-xs text-slate-400 block">/ 100</span>
+                </div>
+              </div>
+
+              <!-- Metadata Badges -->
+              <div class="flex flex-wrap gap-2 text-xs font-medium">
+                <span class="px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700" id="result-lang">Language: EN</span>
+                <span class="px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700" id="result-confidence">Confidence: 95%</span>
+                <span id="rule-badge" class="hidden px-2.5 py-1 rounded-md bg-purple-500/20 text-purple-300 border border-purple-500/30">⚡ Rule Override Fired</span>
+              </div>
+
+              <!-- Red Flags -->
+              <div>
+                <h4 class="text-xs uppercase tracking-wider text-slate-400 font-bold mb-2">Matched Red Flags</h4>
+                <div id="result-flags" class="flex flex-wrap gap-1.5"></div>
+              </div>
+
+              <!-- Explanation -->
+              <div>
+                <h4 class="text-xs uppercase tracking-wider text-slate-400 font-bold mb-1.5">Explanation</h4>
+                <p id="result-explanation" class="text-sm text-slate-200 leading-relaxed bg-slate-900/60 p-3 rounded-lg border border-slate-800/80 font-sans"></p>
+              </div>
+
+              <!-- Action Prompt if Critical -->
+              <div id="result-checklist-alert" class="hidden p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-xs text-red-300 flex items-center justify-between">
+                <span>⚠️ High Risk Detected! Recommended immediate safety steps.</span>
+                <button onclick="switchTab('tab-helpline')" class="underline font-bold hover:text-red-200">View Safety Checklist →</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- 2. SCAMMER LOOKUP TAB -->
+    <div id="tab-scammer" class="tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 max-w-3xl mx-auto space-y-4">
+        <h2 class="text-lg font-bold flex items-center gap-2">
+          <span>📱 Known Scammer Database Lookup</span>
+        </h2>
+        <p class="text-xs text-slate-400">Search against 70+ seeded records of reported cybercriminals (phone numbers or emails).</p>
+        
+        <form onsubmit="runScammerLookup(event)" class="flex gap-2">
+          <input type="text" id="scammer-input" value="+919876543210" required class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 font-mono" placeholder="Enter phone e.g. +919876543210 or email">
+          <button type="submit" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-semibold transition">Search Database</button>
+        </form>
+
+        <div id="scammer-result" class="hidden p-4 rounded-xl border"></div>
+
+        <div class="pt-4 border-t border-slate-800">
+          <span class="text-xs text-slate-400 block mb-2 font-medium">Try these seeded numbers:</span>
+          <div class="flex flex-wrap gap-2 text-xs font-mono">
+            <button onclick="document.getElementById('scammer-input').value='+919876543210'; runScammerLookup(new Event('submit'))" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded border border-slate-700 text-blue-300">+919876543210 (CBI Fake)</button>
+            <button onclick="document.getElementById('scammer-input').value='+919988776655'; runScammerLookup(new Event('submit'))" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded border border-slate-700 text-blue-300">+919988776655 (Customs)</button>
+            <button onclick="document.getElementById('scammer-input').value='sbi.alert@sbi-india.net'; runScammerLookup(new Event('submit'))" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 rounded border border-slate-700 text-blue-300">sbi.alert@sbi-india.net</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. DEEPFAKE CHECK TAB -->
+    <div id="tab-deepfake" class="tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 max-w-3xl mx-auto space-y-4">
+        <h2 class="text-lg font-bold flex items-center gap-2">
+          <span>🎥 Deepfake / Voice Spoofing Analysis</span>
+        </h2>
+        <p class="text-xs text-slate-400">Upload a video (MP4/WebM) or audio file (WAV/MP3) to run OpenCV frame variance or librosa spectral analysis.</p>
+
+        <form onsubmit="runDeepfakeCheck(event)" class="space-y-4">
+          <div class="border-2 border-dashed border-slate-700 hover:border-blue-500 rounded-2xl p-8 text-center bg-slate-900/50 transition">
+            <input type="file" id="deepfake-file" accept="video/*,audio/*" required class="hidden" onchange="updateFileName(this)">
+            <label for="deepfake-file" class="cursor-pointer space-y-2 block">
+              <div class="text-3xl">📁</div>
+              <p class="text-sm font-semibold text-blue-400" id="file-label-text">Click to choose a video or audio recording</p>
+              <p class="text-xs text-slate-500">Supports MP4, WebM, WAV, MP3 up to 50MB</p>
+            </label>
+          </div>
+          <button type="submit" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white rounded-xl text-sm font-semibold shadow-lg transition">Run Deepfake Heuristics</button>
+        </form>
+
+        <div id="deepfake-result" class="hidden p-5 rounded-xl border bg-slate-900/80 space-y-3"></div>
+      </div>
+    </div>
+
+    <!-- 4. NCRB COMPLAINT TAB -->
+    <div id="tab-ncrb" class="tab-content hidden space-y-6">
+      <div class="glass-card rounded-2xl p-6 max-w-4xl mx-auto space-y-6">
+        <div>
+          <h2 class="text-lg font-bold">📋 NCRB Complaint Auto-Fill & Submission</h2>
+          <p class="text-xs text-slate-400">Paste conversation text to auto-extract structured complaint fields using Claude + Regex fallback.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="space-y-3">
+            <label class="text-xs font-semibold text-slate-300 block">Conversation Transcript</label>
+            <textarea id="ncrb-text" rows="8" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-slate-100 placeholder-slate-500" placeholder="e.g. Received call from +919876543210 on 15 July 2025. They asked me to transfer ₹25,000 via UPI claiming to be from ED."></textarea>
+            <button onclick="extractComplaint()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-semibold transition">Auto-Extract Fields</button>
+          </div>
+
+          <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 space-y-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Extracted Complaint Draft</h3>
+            <div id="ncrb-draft-form" class="space-y-2 text-xs">
+              <div>
+                <span class="text-slate-500 block">Scammer Phone:</span>
+                <input type="text" id="draft-phone" class="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-slate-200" readonly>
+              </div>
+              <div>
+                <span class="text-slate-500 block">Amount Demanded/Paid:</span>
+                <input type="text" id="draft-amount" class="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-slate-200" readonly>
+              </div>
+              <div>
+                <span class="text-slate-500 block">Scam Category:</span>
+                <input type="text" id="draft-type" class="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-slate-200" readonly>
+              </div>
+              <div>
+                <span class="text-slate-500 block">Description:</span>
+                <textarea id="draft-desc" rows="2" class="w-full bg-slate-800 border border-slate-700 rounded px-2.5 py-1 text-slate-200" readonly></textarea>
+              </div>
+              <input type="hidden" id="draft-id">
+              <button id="submit-ncrb-btn" onclick="submitNCRB()" disabled class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 disabled:bg-slate-800 disabled:text-slate-600 text-white rounded-lg font-semibold transition">Submit to NCRB (Mock)</button>
+            </div>
+            <div id="ncrb-submit-result" class="hidden p-3 rounded bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-300"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. COMMUNITY & CLUSTERS TAB -->
+    <div id="tab-community" class="tab-content hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="lg:col-span-5 glass-card rounded-2xl p-6 space-y-4">
+          <h2 class="text-base font-bold">📢 Submit New Scam Report</h2>
+          <form onsubmit="submitCommunityReport(event)" class="space-y-3">
+            <textarea id="report-text" rows="5" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-slate-100 placeholder-slate-500" placeholder="Describe the scam incident..."></textarea>
+            <input type="text" id="report-scam-type" placeholder="Scam Type (e.g. digital_arrest)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200">
+            <input type="text" id="report-location" placeholder="Location (e.g. Mumbai)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200">
+            <button type="submit" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-semibold">Submit Report</button>
+          </form>
+          <div id="community-submit-res" class="hidden p-3 rounded-xl border text-xs"></div>
+        </div>
+
+        <div class="lg:col-span-7 glass-card rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-base font-bold">📊 TF-IDF Similarity Clusters</h2>
+            <button onclick="loadClusters()" class="text-xs px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-blue-400 rounded-lg border border-slate-700">Re-cluster Reports</button>
+          </div>
+          <div id="clusters-container" class="space-y-3 max-h-[420px] overflow-y-auto pr-1"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. HELPLINES & SAFETY TAB -->
+    <div id="tab-helpline" class="tab-content hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Helplines -->
+        <div class="lg:col-span-5 glass-card rounded-2xl p-6 space-y-4">
+          <h2 class="text-base font-bold">📞 Verified Fraud Helplines</h2>
+          <input type="text" id="hotline-search" onkeyup="searchHotlines()" placeholder="Search helpline (e.g. CBI, RBI, SBI)..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200">
+          <div id="hotlines-list" class="space-y-2 max-h-[460px] overflow-y-auto pr-1"></div>
+        </div>
+
+        <!-- Checklist -->
+        <div class="lg:col-span-7 glass-card rounded-2xl p-6 space-y-4">
+          <h2 class="text-base font-bold flex items-center justify-between">
+            <span>🛡️ Post-Scam Safety Checklist</span>
+            <span class="text-xs font-normal text-slate-400">15 Deterministic Steps</span>
+          </h2>
+          <div id="checklist-container" class="space-y-2.5 max-h-[460px] overflow-y-auto pr-1"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. ANALYTICS TAB -->
+    <div id="tab-analytics" class="tab-content hidden space-y-6">
+      <div class="flex justify-between items-center">
+        <h2 class="text-lg font-bold">📊 Real-Time Scam Trends & Analytics</h2>
+        <button onclick="loadAnalytics()" class="text-xs px-3 py-1.5 bg-blue-600 text-white rounded-lg font-semibold">Refresh Analytics</button>
+      </div>
+
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="glass-card p-4 rounded-xl">
+          <span class="text-xs text-slate-400 font-medium block">Total Scans Run</span>
+          <span class="text-2xl font-extrabold text-blue-400" id="stat-total-scans">0</span>
+        </div>
+        <div class="glass-card p-4 rounded-xl">
+          <span class="text-xs text-slate-400 font-medium block">Community Reports</span>
+          <span class="text-2xl font-extrabold text-indigo-400" id="stat-total-reports">0</span>
+        </div>
+        <div class="glass-card p-4 rounded-xl">
+          <span class="text-xs text-slate-400 font-medium block">Critical Threats</span>
+          <span class="text-2xl font-extrabold text-red-400" id="stat-critical-cnt">0</span>
+        </div>
+        <div class="glass-card p-4 rounded-xl">
+          <span class="text-xs text-slate-400 font-medium block">High Threats</span>
+          <span class="text-2xl font-extrabold text-orange-400" id="stat-high-cnt">0</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="glass-card p-6 rounded-2xl space-y-3">
+          <h3 class="text-sm font-bold text-slate-300">Top Matched Red Flags</h3>
+          <div id="analytics-red-flags" class="space-y-2"></div>
+        </div>
+
+        <div class="glass-card p-6 rounded-2xl space-y-3">
+          <h3 class="text-sm font-bold text-slate-300">Top Scam Categories</h3>
+          <div id="analytics-scam-types" class="space-y-2"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 py-4 text-center text-xs text-slate-500">
+    Digital Arrest Scam Detector • FastAPI + Claude Sonnet + PostgreSQL + Twilio Sandbox
+  </footer>
+
+  <!-- App Logic -->
+  <script>
+    let currentAnalysisType = 'message';
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(el => {
+        el.classList.remove('tab-active');
+        el.classList.add('text-slate-400');
+      });
+      
+      document.getElementById(tabId).classList.remove('hidden');
+      const activeBtn = document.getElementById('btn-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.add('tab-active');
+        activeBtn.classList.remove('text-slate-400');
+      }
+
+      if (tabId === 'tab-analytics') loadAnalytics();
+      if (tabId === 'tab-helpline') { loadHotlines(); loadChecklist(); }
+      if (tabId === 'tab-community') loadClusters();
+    }
+
+    function setAnalysisType(type) {
+      currentAnalysisType = type;
+      document.getElementById('type-btn-message').className = type === 'message' ? 'px-3 py-1 text-xs rounded-md font-semibold bg-blue-600 text-white' : 'px-3 py-1 text-xs rounded-md font-semibold text-slate-400 hover:text-white';
+      document.getElementById('type-btn-call').className = type === 'call' ? 'px-3 py-1 text-xs rounded-md font-semibold bg-blue-600 text-white' : 'px-3 py-1 text-xs rounded-md font-semibold text-slate-400 hover:text-white';
+      document.getElementById('scan-input').placeholder = type === 'message' ? 'Paste forwarded message text...' : 'Describe the phone/video call received (e.g. CBI officer threatened arrest on Zoom call)...';
+    }
+
+    const SAMPLE_INPUTS = {
+      critical_cbi: "CBI officer here. You have a criminal case registered against you under Section 66C. Pay ₹50,000 immediately to clear your name or face arrest in 2 hours.",
+      critical_hindi: "आपके आधार कार्ड पर मनी लॉन्ड्रिंग का केस दर्ज हुआ है। ED अधिकारी आपसे वीडियो कॉल पर बात करना चाहते हैं। अभी फोन पर रहें वरना गिरफ्तारी होगी।",
+      customs: "Your parcel from UK has been seized by Indian Customs containing illegal narcotics. Pay Rs 15,000 customs clearance fee to release.",
+      safe: "Hey! Let's meet for lunch at 1 PM today. Text me when you leave."
+    };
+
+    function loadSample(key) {
+      document.getElementById('scan-input').value = SAMPLE_INPUTS[key];
+    }
+
+    async function runScan(e) {
+      e.preventDefault();
+      const text = document.getElementById('scan-input').value.trim();
+      const userId = document.getElementById('scan-user-id').value.trim() || 'demo_web_user';
+      if (!text) return;
+
+      const submitBtn = document.getElementById('scan-submit-btn');
+      const spinner = document.getElementById('scan-spinner');
+      submitBtn.disabled = true;
+      spinner.classList.remove('hidden');
+
+      const endpoint = currentAnalysisType === 'message' ? '/api/v1/analysis/message' : '/api/v1/analysis/call';
+      const payload = currentAnalysisType === 'message' ? { text: text, user_id: userId } : { description: text, user_id: userId };
+
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        displayScanResult(data);
+      } catch (err) {
+        alert('API Error: ' + err.message);
+      } finally {
+        submitBtn.disabled = false;
+        spinner.classList.add('hidden');
+      }
+    }
+
+    function displayScanResult(data) {
+      document.getElementById('scan-empty').classList.add('hidden');
+      document.getElementById('scan-output').classList.remove('hidden');
+
+      const banner = document.getElementById('tier-banner');
+      banner.className = `flex items-center justify-between p-4 rounded-xl border tier-${data.risk_tier}`;
+      document.getElementById('result-tier').innerText = data.risk_tier;
+      document.getElementById('result-score').innerText = data.risk_score;
+
+      document.getElementById('result-lang').innerText = `Language: ${data.language.toUpperCase()}`;
+      document.getElementById('result-confidence').innerText = `Confidence: ${Math.round(data.confidence * 100)}%`;
+
+      const ruleBadge = document.getElementById('rule-badge');
+      if (data.rule_override_fired) {
+        ruleBadge.innerText = `⚡ Rule Override: ${data.rule_fired_name}`;
+        ruleBadge.classList.remove('hidden');
+      } else {
+        ruleBadge.classList.add('hidden');
+      }
+
+      const flagsContainer = document.getElementById('result-flags');
+      flagsContainer.innerHTML = (data.matched_red_flags || []).map(f => 
+        `<span class="px-2 py-0.5 rounded bg-red-500/20 text-red-300 border border-red-500/30 text-xs font-mono">🚩 ${f}</span>`
+      ).join('') || '<span class="text-slate-500 text-xs">No red flags matched</span>';
+
+      document.getElementById('result-explanation').innerText = data.explanation;
+
+      const checklistAlert = document.getElementById('result-checklist-alert');
+      if (data.checklist_triggered) {
+        checklistAlert.classList.remove('hidden');
+      } else {
+        checklistAlert.classList.add('hidden');
+      }
+    }
+
+    async function runScammerLookup(e) {
+      e.preventDefault();
+      const input = document.getElementById('scammer-input').value.trim();
+      const resContainer = document.getElementById('scammer-result');
+      resContainer.classList.remove('hidden');
+      resContainer.className = 'p-4 rounded-xl border bg-slate-900 text-xs';
+      resContainer.innerText = 'Searching database...';
+
+      try {
+        const res = await fetch(`/api/v1/scammer/lookup?identifier=${encodeURIComponent(input)}`);
+        const data = await res.json();
+        if (data.found) {
+          resContainer.className = 'p-4 rounded-xl border border-red-500/30 bg-red-500/10 text-xs space-y-2';
+          resContainer.innerHTML = `
+            <div class="font-bold text-red-400 text-sm">🚨 MATCH FOUND IN SCAMMER DATABASE</div>
+            <div>Identifier: <span class="font-mono text-white">${data.record.identifier}</span></div>
+            <div>Report Count: <span class="font-bold text-white">${data.record.report_count}</span> times</div>
+            <div>Category: <span class="text-white">${data.record.scam_type}</span></div>
+            <div>Notes: <span class="text-slate-300">${data.record.notes || 'N/A'}</span></div>
+          `;
+        } else {
+          resContainer.className = 'p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-xs space-y-1';
+          resContainer.innerHTML = `
+            <div class="font-bold text-emerald-400">✅ NOT FOUND IN DATABASE</div>
+            <p class="text-slate-300">${data.message}</p>
+          `;
+        }
+      } catch (err) {
+        resContainer.innerText = 'Error: ' + err.message;
+      }
+    }
+
+    function updateFileName(input) {
+      const label = document.getElementById('file-label-text');
+      if (input.files && input.files[0]) {
+        label.innerText = 'Selected file: ' + input.files[0].name;
+      }
+    }
+
+    async function runDeepfakeCheck(e) {
+      e.preventDefault();
+      const fileInput = document.getElementById('deepfake-file');
+      if (!fileInput.files[0]) return;
+
+      const resDiv = document.getElementById('deepfake-result');
+      resDiv.classList.remove('hidden');
+      resDiv.innerHTML = '<span class="text-xs text-slate-400">Running frame & audio spectral analysis...</span>';
+
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
+
+      try {
+        const res = await fetch('/api/v1/deepfake/check', {
+          method: 'POST',
+          body: formData
+        });
+        const data = await res.json();
+        resDiv.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-sm ${data.likely_deepfake ? 'text-red-400' : 'text-emerald-400'}">
+              ${data.likely_deepfake ? '🚨 LIKELY DEEPFAKE / SPOOFED' : '✅ LOW DEEPFAKE RISK'}
+            </span>
+            <span class="text-xs font-mono bg-slate-800 px-2 py-0.5 rounded">Confidence: ${Math.round(data.confidence * 100)}%</span>
+          </div>
+          <p class="text-xs text-slate-300">${data.notes}</p>
+          <div class="text-xs text-slate-400">
+            <strong>Heuristics Evaluated:</strong> ${data.heuristics_used.join(', ')}
+          </div>
+        `;
+      } catch (err) {
+        resDiv.innerText = 'Error: ' + err.message;
+      }
+    }
+
+    async function extractComplaint() {
+      const text = document.getElementById('ncrb-text').value.trim();
+      if (!text) return;
+
+      try {
+        const res = await fetch('/api/v1/complaint/extract', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ conversation_text: text, user_id: 'web_demo' })
+        });
+        const data = await res.json();
+
+        document.getElementById('draft-phone').value = data.phone_number || 'Not found';
+        document.getElementById('draft-amount').value = data.amount || 'Not found';
+        document.getElementById('draft-type').value = data.scam_type || 'digital_arrest';
+        document.getElementById('draft-desc').value = data.description || text.substring(0, 100);
+        document.getElementById('draft-id').value = data.complaint_id;
+
+        document.getElementById('submit-ncrb-btn').disabled = false;
+      } catch (err) {
+        alert('Extraction failed: ' + err.message);
+      }
+    }
+
+    async function submitNCRB() {
+      const cid = document.getElementById('draft-id').value;
+      if (!cid) return;
+
+      try {
+        const res = await fetch(`/api/v1/complaint/submit/${cid}`, { method: 'POST' });
+        const data = await res.json();
+        const resDiv = document.getElementById('ncrb-submit-result');
+        resDiv.classList.remove('hidden');
+        resDiv.innerHTML = `
+          <div class="font-bold">✅ Mock Submission Successful</div>
+          <div>Reference No: <span class="font-mono font-bold">${data.reference_number}</span></div>
+          <div class="text-[10px] text-slate-400 mt-1">${data.note}</div>
+        `;
+      } catch (err) {
+        alert('Submission failed: ' + err.message);
+      }
+    }
+
+    async function submitCommunityReport(e) {
+      e.preventDefault();
+      const text = document.getElementById('report-text').value;
+      const type = document.getElementById('report-scam-type').value;
+      const loc = document.getElementById('report-location').value;
+
+      try {
+        const res = await fetch('/api/v1/community/report', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ report_text: text, scam_type: type, location: loc, user_id: 'web_demo' })
+        });
+        const data = await res.json();
+        const resDiv = document.getElementById('community-submit-res');
+        resDiv.classList.remove('hidden');
+        resDiv.className = 'p-3 rounded-xl border border-blue-500/30 bg-blue-500/10 text-xs text-blue-300';
+        resDiv.innerText = data.message;
+        loadClusters();
+      } catch (err) {
+        alert('Error: ' + err.message);
+      }
+    }
+
+    async function loadClusters() {
+      const container = document.getElementById('clusters-container');
+      container.innerHTML = '<span class="text-xs text-slate-400">Clustering reports via TF-IDF...</span>';
+
+      try {
+        const res = await fetch('/api/v1/community/clusters?limit=50');
+        const data = await res.json();
+        container.innerHTML = data.clusters.map(c => `
+          <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs space-y-1">
+            <div class="flex items-center justify-between font-bold text-slate-200">
+              <span>Cluster #${c.cluster_id} (${c.common_scam_type || 'General'})</span>
+              <span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 font-mono">${c.report_count} reports</span>
+            </div>
+            <p class="text-slate-400 italic font-sans">"${c.representative_text}..."</p>
+          </div>
+        `).join('') || '<span class="text-xs text-slate-500">No clusters formed yet</span>';
+      } catch (err) {
+        container.innerText = 'Failed to load clusters';
+      }
+    }
+
+    let allHotlines = [];
+    async function loadHotlines() {
+      try {
+        const res = await fetch('/api/v1/hotline/all');
+        const data = await res.json();
+        allHotlines = data.results;
+        renderHotlines(allHotlines);
+      } catch (err) {}
+    }
+
+    function renderHotlines(list) {
+      document.getElementById('hotlines-list').innerHTML = list.map(h => `
+        <div class="p-2.5 rounded-lg bg-slate-900 border border-slate-800 text-xs flex justify-between items-center">
+          <div>
+            <div class="font-bold text-slate-200">${h.organization}</div>
+            <div class="text-[10px] text-slate-400">${h.notes || ''}</div>
+          </div>
+          <div class="text-right">
+            <span class="font-mono text-emerald-400 font-bold block">${h.number}</span>
+            <span class="text-[10px] text-slate-500">${h.available}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function searchHotlines() {
+      const q = document.getElementById('hotline-search').value.toLowerCase();
+      const filtered = allHotlines.filter(h => h.organization.toLowerCase().includes(q) || h.number.includes(q));
+      renderHotlines(filtered);
+    }
+
+    async function loadChecklist() {
+      try {
+        const res = await fetch('/api/v1/checklist');
+        const data = await res.json();
+        document.getElementById('checklist-container').innerHTML = data.checklist.map(item => `
+          <div class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-xs space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-slate-200">Step ${item.step}: ${item.action}</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold ${item.urgency === 'IMMEDIATE' ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-slate-800 text-slate-400'}">${item.urgency}</span>
+            </div>
+            <p class="text-slate-400 text-[11px]">${item.description}</p>
+            ${item.contact ? `<div class="text-blue-400 font-mono text-[10px]">Contact: ${item.contact}</div>` : ''}
+          </div>
+        `).join('');
+      } catch (err) {}
+    }
+
+    async function loadAnalytics() {
+      try {
+        const res = await fetch('/api/v1/analytics/trends');
+        const data = await res.json();
+        document.getElementById('stat-total-scans').innerText = data.total_analyses;
+        document.getElementById('stat-total-reports').innerText = data.total_community_reports;
+        document.getElementById('stat-critical-cnt').innerText = data.risk_distribution.CRITICAL || 0;
+        document.getElementById('stat-high-cnt').innerText = data.risk_distribution.HIGH || 0;
+
+        document.getElementById('analytics-red-flags').innerHTML = data.top_red_flags.map(rf => `
+          <div class="flex justify-between items-center text-xs p-2 bg-slate-900 rounded border border-slate-800">
+            <span class="font-mono text-slate-300">🚩 ${rf.flag}</span>
+            <span class="font-bold text-blue-400 font-mono">${rf.count}</span>
+          </div>
+        `).join('');
+
+        document.getElementById('analytics-scam-types').innerHTML = data.top_scam_types.map(st => `
+          <div class="flex justify-between items-center text-xs p-2 bg-slate-900 rounded border border-slate-800">
+            <span class="text-slate-300">${st.scam_type}</span>
+            <span class="font-bold text-indigo-400 font-mono">${st.count}</span>
+          </div>
+        `).join('');
+      } catch (err) {}
+    }
+  </script>
+</body>
+</html>

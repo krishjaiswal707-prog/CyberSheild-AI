@@ -1,0 +1,130 @@
+{
+  "hotlines": [
+    {
+      "organization": "National Cybercrime Helpline",
+      "number": "1930",
+      "type": "tollfree",
+      "available": "24x7",
+      "notes": "India's primary cybercrime reporting helpline — call immediately if scammed"
+    },
+    {
+      "organization": "Cybercrime Reporting Portal",
+      "number": "https://cybercrime.gov.in",
+      "type": "portal",
+      "available": "24x7",
+      "notes": "Online portal to file cybercrime complaints (I4C — Ministry of Home Affairs)"
+    },
+    {
+      "organization": "CBI Headquarters",
+      "number": "011-24368050",
+      "type": "landline",
+      "available": "9am-6pm Mon-Sat",
+      "notes": "Verify if a CBI officer is genuine — real CBI does NOT call about arrest warrants on WhatsApp"
+    },
+    {
+      "organization": "Enforcement Directorate (ED)",
+      "number": "011-24631753",
+      "type": "landline",
+      "available": "9am-5:30pm Mon-Fri",
+      "notes": "Verify ED officer claims — ED does not conduct 'digital arrests'"
+    },
+    {
+      "organization": "RBI Helpline",
+      "number": "14440",
+      "type": "tollfree",
+      "available": "9:30am-5:15pm Mon-Sat",
+      "notes": "RBI complaint helpline — report fake RBI calls demanding KYC/bank details"
+    },
+    {
+      "organization": "RBI Ombudsman (Banking Fraud)",
+      "number": "https://cms.rbi.org.in",
+      "type": "portal",
+      "available": "24x7",
+      "notes": "File complaints against banks for fraud-related issues"
+    },
+    {
+      "organization": "TRAI (Telecom Regulatory Authority of India)",
+      "number": "1800-110-420",
+      "type": "tollfree",
+      "available": "9am-6pm Mon-Fri",
+      "notes": "Report fake TRAI calls threatening to disconnect your mobile number"
+    },
+    {
+      "organization": "SBI Fraud Helpline",
+      "number": "1800-11-2211",
+      "type": "tollfree",
+      "available": "24x7",
+      "notes": "State Bank of India — block cards and report fraud transactions"
+    },
+    {
+      "organization": "HDFC Bank Fraud Helpline",
+      "number": "1800-202-6161",
+      "type": "tollfree",
+      "available": "24x7",
+      "notes": "HDFC Bank — block card and report fraudulent transactions immediately"
+    },
+    {
+      "organization": "ICICI Bank Fraud Helpline",
+      "number": "1800-200-3344",
+      "type": "tollfree",
+      "available": "24x7",
+      "notes": "ICICI Bank — block card and report fraud immediately"
+    },
+    {
+      "organization": "Axis Bank Fraud Helpline",
+      "number": "1800-212-0025",
+      "type": "tollfree",
+      "available": "24x7",
+      "notes": "Axis Bank customer care for blocking cards and reporting fraud"
+    },
+    {
+      "organization": "Kotak Mahindra Bank Fraud",
+      "number": "1860-266-0811",
+      "type": "helpline",
+      "available": "24x7",
+      "notes": "Kotak Bank — report unauthorised transactions immediately"
+    },
+    {
+      "organization": "Paytm Payments Bank Fraud",
+      "number": "0120-4456-456",
+      "type": "helpline",
+      "available": "24x7",
+      "notes": "Paytm — report fraudulent UPI/wallet transactions"
+    },
+    {
+      "organization": "NPCI UPI Fraud Helpline",
+      "number": "1800-120-1740",
+      "type": "tollfree",
+      "available": "24x7",
+      "notes": "National Payments Corporation of India — report UPI fraud across all apps"
+    },
+    {
+      "organization": "Delhi Police Cyber Cell",
+      "number": "011-25844444",
+      "type": "helpline",
+      "available": "24x7",
+      "notes": "Delhi-based cyber crime reporting"
+    },
+    {
+      "organization": "Maharashtra Cyber Helpline",
+      "number": "1800-209-4444",
+      "type": "tollfree",
+      "available": "24x7",
+      "notes": "Maharashtra state cybercrime helpline"
+    },
+    {
+      "organization": "Indian Computer Emergency Response Team (CERT-In)",
+      "number": "1800-11-4949",
+      "type": "tollfree",
+      "available": "24x7",
+      "notes": "Report cyber incidents and phishing attacks"
+    },
+    {
+      "organization": "Prime Minister's Office (PMO) Grievance",
+      "number": "https://pgportal.gov.in",
+      "type": "portal",
+      "available": "24x7",
+      "notes": "Escalate unresolved cybercrime complaints to PMO"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+# ── Web Framework ──────────────────────────────────────────────────────────────
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+python-multipart==0.0.19        # file uploads
+
+# ── AI / NLP ───────────────────────────────────────────────────────────────────
+anthropic==0.40.0               # Claude Sonnet 4-5 / 4-6
+langdetect==1.0.9               # Hindi/English detection
+
+# ── Database ───────────────────────────────────────────────────────────────────
+sqlalchemy==2.0.36
+asyncpg==0.30.0                 # async PostgreSQL driver
+alembic==1.14.0
+
+# ── Pydantic / Config ──────────────────────────────────────────────────────────
+pydantic==2.10.3
+pydantic-settings==2.7.0
+python-dotenv==1.0.1
+
+# ── Twilio ─────────────────────────────────────────────────────────────────────
+twilio==9.4.0
+
+# ── ML / Similarity ────────────────────────────────────────────────────────────
+scikit-learn>=1.3.0
+numpy>=1.26.0
+
+# ── Deepfake Heuristics ────────────────────────────────────────────────────────
+opencv-python-headless==4.10.0.84   # frame consistency check (no GUI needed)
+librosa==0.10.2                     # audio spectral analysis
+soundfile==0.12.1                   # audio file I/O
+
+# ── HTTP client (for any outbound calls) ──────────────────────────────────────
+httpx==0.28.1

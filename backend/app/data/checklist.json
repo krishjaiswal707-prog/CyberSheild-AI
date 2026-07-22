@@ -1,0 +1,109 @@
+{
+  "checklist": [
+    {
+      "step": 1,
+      "action": "STOP all communication with the scammer immediately",
+      "urgency": "IMMEDIATE",
+      "contact": null,
+      "description": "Hang up the call. Block the number. Do not respond to further messages. Scammers will keep pressuring you — any further contact gives them more leverage."
+    },
+    {
+      "step": 2,
+      "action": "Call 1930 — National Cybercrime Helpline",
+      "urgency": "IMMEDIATE",
+      "contact": "1930",
+      "description": "This is India's 24x7 cybercrime helpline. Report immediately — the faster you report, the better the chance of freezing scammer accounts and recovering money."
+    },
+    {
+      "step": 3,
+      "action": "File complaint at cybercrime.gov.in",
+      "urgency": "IMMEDIATE",
+      "contact": "https://cybercrime.gov.in",
+      "description": "Go to the National Cybercrime Reporting Portal and file a complaint. Save the complaint reference number. If you paid, select 'Financial Fraud' category."
+    },
+    {
+      "step": 4,
+      "action": "Contact your bank immediately to freeze / reverse the transaction",
+      "urgency": "IMMEDIATE",
+      "contact": "Call your bank's 24x7 helpline",
+      "description": "If you transferred money, call your bank's fraud helpline RIGHT NOW. They can initiate a chargeback or freeze the recipient account. Time is critical — within 24 hours gives best recovery chance."
+    },
+    {
+      "step": 5,
+      "action": "Block all numbers used by the scammer",
+      "urgency": "IMMEDIATE",
+      "contact": null,
+      "description": "Block on WhatsApp, phone, email. Report the WhatsApp number to WhatsApp as fraud (long press on chat > Report)."
+    },
+    {
+      "step": 6,
+      "action": "Do NOT send any more money — even to 'recover' lost money",
+      "urgency": "IMMEDIATE",
+      "contact": null,
+      "description": "Scammers often call back posing as 'cyber police' offering to recover your money for a fee. This is a second scam — never pay recovery agents."
+    },
+    {
+      "step": 7,
+      "action": "Take screenshots of all conversations, calls, and transactions",
+      "urgency": "WITHIN_24H",
+      "contact": null,
+      "description": "Document the scammer's number, chat messages, UPI/bank transaction IDs, and any names or badge numbers they used. This evidence is essential for police investigation."
+    },
+    {
+      "step": 8,
+      "action": "File a First Information Report (FIR) at your local police station",
+      "urgency": "WITHIN_24H",
+      "contact": "Local police station / Dial 100",
+      "description": "Visit your nearest police station with all evidence (screenshots, transaction receipts, phone numbers). Request a FIR under Section 66C/66D IT Act and IPC fraud sections. You can also file online in many states."
+    },
+    {
+      "step": 9,
+      "action": "Change passwords for all financial accounts",
+      "urgency": "WITHIN_24H",
+      "contact": null,
+      "description": "If you shared any account credentials, OTPs, or personal details, change passwords immediately on banking apps, email, and UPI apps. Enable 2-factor authentication everywhere."
+    },
+    {
+      "step": 10,
+      "action": "Check Aadhaar-linked accounts for suspicious activity",
+      "urgency": "WITHIN_24H",
+      "contact": "https://myaadhaar.uidai.gov.in",
+      "description": "Log in to myAadhaar portal and check which services are linked to your Aadhaar. If your Aadhaar was compromised, contact UIDAI helpline: 1947."
+    },
+    {
+      "step": 11,
+      "action": "Talk to a trusted family member or friend",
+      "urgency": "WITHIN_24H",
+      "contact": null,
+      "description": "Scammers use shame and fear to keep victims silent. Tell a family member immediately — you are not at fault. Digital arrest is a criminal scam, not a legal process."
+    },
+    {
+      "step": 12,
+      "action": "Report the number on Sanchar Saathi portal",
+      "urgency": "WITHIN_24H",
+      "contact": "https://sancharsaathi.gov.in/sfc",
+      "description": "Report the scammer's phone number to DoT's Sanchar Saathi portal to get the number blacklisted and protect others."
+    },
+    {
+      "step": 13,
+      "action": "Monitor your credit report for identity theft",
+      "urgency": "WITHIN_WEEK",
+      "contact": "https://www.cibil.com",
+      "description": "Check your CIBIL score and credit report for any new accounts or loans taken in your name. If your PAN or Aadhaar was shared, fraudulent loans may have been applied for."
+    },
+    {
+      "step": 14,
+      "action": "Register on CFCFRMS for fund recovery tracking",
+      "urgency": "WITHIN_WEEK",
+      "contact": "https://cybercrime.gov.in",
+      "description": "The Citizen Financial Cyber Fraud Reporting & Management System (CFCFRMS) helps track and potentially recover defrauded funds. Register via the cybercrime portal."
+    },
+    {
+      "step": 15,
+      "action": "Seek mental health support if needed",
+      "urgency": "WITHIN_WEEK",
+      "contact": "iCall: 9152987821",
+      "description": "Being scammed can cause anxiety, shame, and distress. iCall is a free mental health helpline. You are not alone — thousands fall victim to these sophisticated scams each year."
+    }
+  ]
+}
