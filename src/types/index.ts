@@ -36,6 +36,7 @@ export interface RiskAnalysis {
   sourceType?: 'url' | 'phone' | 'text' | 'image' | 'qr'
   sourceValue?: string
   analyzedAt?: Date
+  checklist_triggered?: boolean
 }
 
 export interface Message {

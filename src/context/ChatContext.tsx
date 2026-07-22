@@ -19,7 +19,7 @@ const welcome: Message = {
   id: 'welcome',
   type: 'bot',
   content:
-    'Hi, I am SafeGuard AI. Paste a message, link, phone number, or upload a screenshot and I will check it for scam signals.',
+    'Hi, I am CyberSheild-AI. Paste a message, link, phone number, or upload a screenshot and I will check it for scam signals. I detect Digital Arrest scams, fake government impersonation, and financial fraud in real-time.',
   timestamp: new Date(),
 }
 

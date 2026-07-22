@@ -61,7 +61,7 @@ export function MessageInput({
     <form
       onSubmit={submit}
       className="flex flex-col gap-2 border-t border-border bg-bg/95 px-2 py-2 sm:px-4 sm:py-3"
-      aria-label="Send a message to SafeGuard AI"
+      aria-label="Send a message to CyberSheild-AI"
     >
       {quickActions.length > 0 && (
         <div className="no-scrollbar flex gap-2 overflow-x-auto" role="group">

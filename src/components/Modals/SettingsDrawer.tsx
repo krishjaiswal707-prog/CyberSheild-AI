@@ -24,7 +24,7 @@ export function SettingsDrawer() {
       onClose={onClose}
       variant="drawer"
       title="Settings"
-      description="Customize how SafeGuard AI behaves."
+      description="Customize how CyberSheild-AI behaves."
     >
       <div className="flex flex-col gap-5">
         <ToggleRow

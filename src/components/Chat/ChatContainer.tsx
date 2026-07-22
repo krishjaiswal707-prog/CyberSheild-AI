@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, type Ref } from 'react'
+import { useCallback, useEffect, useRef, useState, type Ref } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { useChat } from '@/hooks/useChat'
 import { useModal } from '@/hooks/useModal'
@@ -6,7 +6,9 @@ import { UserMessage } from '@/components/Chat/UserMessage'
 import { BotRiskCard } from '@/components/Chat/BotRiskCard'
 import { TypingIndicator } from '@/components/Chat/TypingIndicator'
 import { MessageInput } from '@/components/Chat/MessageInput'
+import { analyzeMessage } from '@/lib/api'
 import { autoAnalyze } from '@/lib/analyzer'
+import type { ActionButton, RiskAnalysis, RiskLevel } from '@/types'
 
 const QUICK_ACTIONS: Array<{ label: string; prompt: string }> = [
   {
@@ -36,6 +38,7 @@ export interface ChatContainerProps {
 export function ChatContainer({ scrollRef }: ChatContainerProps) {
   const { messages, isAnalyzing, sendMessage, addBotAnalysis, clearChat } = useChat()
   const { openModal, setDetailPayload } = useModal()
+  const [apiStatus, setApiStatus] = useState<'online' | 'offline' | 'unknown'>('unknown')
 
   const localRef = useRef<HTMLDivElement>(null)
   const ref = (scrollRef ?? localRef) as React.RefObject<HTMLDivElement>
@@ -44,28 +47,63 @@ export function ChatContainer({ scrollRef }: ChatContainerProps) {
     ref.current?.scrollTo({ top: ref.current.scrollHeight, behavior: 'smooth' })
   }, [messages, isAnalyzing, ref])
 
+  const fallbackAnalysis = useCallback(
+    (content: string, summary?: string) => {
+      const analysis = autoAnalyze(content)
+      addBotAnalysis(analysis, summary ?? analysis.explanation)
+    },
+    [addBotAnalysis],
+  )
+
+  const callBackend = useCallback(
+    async (content: string) => {
+      try {
+        const res = await analyzeMessage(content)
+        setApiStatus('online')
+        const analysis: RiskAnalysis = {
+          score: res.risk_score,
+          level: res.risk_tier as RiskLevel,
+          confidence: Math.round(res.confidence * 100),
+          redFlags: res.matched_red_flags.map((flag, i) => ({
+            id: `flag-${i}`,
+            text: flag,
+            severity: res.risk_score >= 85 ? 'CRITICAL' as RiskLevel : res.risk_score >= 65 ? 'HIGH' as RiskLevel : 'MEDIUM' as RiskLevel,
+          })),
+          explanation: res.explanation,
+          sourceType: 'text',
+          analyzedAt: new Date(),
+          checklist_triggered: res.checklist_triggered,
+          actions: buildActions(res.risk_tier as RiskLevel),
+        }
+        addBotAnalysis(analysis, analysis.explanation)
+      } catch {
+        setApiStatus('offline')
+        fallbackAnalysis(content)
+      }
+    },
+    [addBotAnalysis, fallbackAnalysis],
+  )
+
   const handleSend = useCallback(
     (content: string) => {
       sendMessage(content)
-      const analysis = autoAnalyze(content)
-      window.setTimeout(() => addBotAnalysis(analysis, analysis.explanation), 1100)
+      callBackend(content)
     },
-    [sendMessage, addBotAnalysis],
+    [sendMessage, callBackend],
   )
 
   const handleAttach = useCallback(
     (file: File) => {
       const text = `Image attachment: ${file.name} (${file.type || 'unknown type'})`
       sendMessage(text)
-      const analysis = autoAnalyze(text)
-      analysis.sourceType = 'image'
-      analysis.sourceValue = file.name
-      window.setTimeout(
-        () => addBotAnalysis(analysis, 'Analyzed the uploaded image.'),
-        1400,
-      )
+      const fallback = () => fallbackAnalysis(text, 'Analyzed the uploaded image.')
+      try {
+        fallback()
+      } catch {
+        fallback()
+      }
     },
-    [sendMessage, addBotAnalysis],
+    [sendMessage, fallbackAnalysis],
   )
 
   const handleDetail = useCallback(() => {
@@ -76,10 +114,17 @@ export function ChatContainer({ scrollRef }: ChatContainerProps) {
     }
   }, [messages, setDetailPayload, openModal])
 
+  const statusLabel =
+    apiStatus === 'online'
+      ? '✓ Connected to backend API'
+      : apiStatus === 'offline'
+        ? '⚠ Backend unreachable — using local fallback'
+        : 'Connecting to backend…'
+
   return (
     <section
       className="flex min-h-0 flex-1 flex-col bg-bg"
-      aria-label="Chat with SafeGuard AI"
+      aria-label="Chat with CyberSheild-AI"
     >
       <div
         ref={ref}
@@ -103,7 +148,7 @@ export function ChatContainer({ scrollRef }: ChatContainerProps) {
       </div>
 
       <div className="flex items-center justify-between px-3 pb-1 sm:px-6">
-        <p className="text-[11px] text-text-muted">Demo analyzer runs locally in your browser.</p>
+        <p className="text-[11px] text-text-muted">{statusLabel}</p>
         <button
           type="button"
           onClick={clearChat}
@@ -121,4 +166,20 @@ export function ChatContainer({ scrollRef }: ChatContainerProps) {
       />
     </section>
   )
+}
+
+function buildActions(level: RiskLevel): ActionButton[] {
+  const noop = () => {}
+  if (level === 'SAFE' || level === 'LOW') {
+    return [
+      { id: 'a1', label: 'Mark as reviewed', onClick: noop, variant: 'primary' },
+      { id: 'a2', label: 'Learn scam signs', onClick: noop, variant: 'secondary' },
+    ]
+  }
+  return [
+    { id: 'a1', label: 'Block sender', onClick: noop, variant: 'primary' },
+    { id: 'a2', label: 'Report on WhatsApp', onClick: noop, variant: 'primary' },
+    { id: 'a3', label: 'File NCRB complaint', onClick: noop, variant: 'secondary' },
+    { id: 'a4', label: 'Get recovery help', onClick: noop, variant: 'secondary' },
+  ]
 }

@@ -6,7 +6,7 @@ function TypingIndicatorBase() {
     <div
       className="flex items-center gap-2"
       role="status"
-      aria-label="SafeGuard AI is analyzing your message"
+      aria-label="CyberSheild-AI is analyzing your message"
     >
       <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-pill bg-risk-safe/10">
         <Shield size={14} className="text-risk-safe" aria-hidden="true" />

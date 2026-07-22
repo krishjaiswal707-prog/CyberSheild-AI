@@ -29,13 +29,13 @@ function BotRiskCardBase({ message, onRequestDetail }: BotRiskCardProps) {
       transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
       className="flex w-full max-w-[85%] flex-col gap-2"
       role="article"
-      aria-label="SafeGuard AI risk analysis"
+      aria-label="CyberSheild-AI risk analysis"
     >
       <div className="flex items-center gap-2">
         <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-pill bg-risk-safe/10">
           <Shield size={14} className="text-risk-safe" aria-hidden="true" />
         </div>
-        <span className="text-[13px] font-medium text-text-primary">SafeGuard AI</span>
+        <span className="text-[13px] font-medium text-text-primary">CyberSheild-AI</span>
         <time
           className="text-[10px] text-text-muted"
           dateTime={message.timestamp.toISOString()}

@@ -33,13 +33,13 @@ function HeaderBase() {
           <Menu size={18} aria-hidden="true" />
         </button>
 
-        <div className="flex items-center gap-2" aria-label="SafeGuard AI">
+        <div className="flex items-center gap-2" aria-label="CyberSheild-AI">
           <span className="flex h-8 w-8 items-center justify-center rounded-pill bg-risk-safe/10">
             <Shield size={16} className="text-risk-safe" aria-hidden="true" />
           </span>
           <div className="flex flex-col leading-none">
-            <h1 className="text-[15px] font-semibold text-text-primary">SafeGuard AI</h1>
-            <p className="text-[11px] text-text-muted">Scam Detector</p>
+            <h1 className="text-[15px] font-semibold text-text-primary">CyberSheild-AI</h1>
+            <p className="text-[11px] text-text-muted">Digital Arrest Scam Detector</p>
           </div>
         </div>
       </div>

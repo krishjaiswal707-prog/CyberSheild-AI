@@ -17,7 +17,7 @@ export function MainLayout() {
 
         <main
           className="flex min-h-0 min-w-0 flex-1 flex-col"
-          aria-label="SafeGuard AI chat"
+          aria-label="CyberSheild-AI chat"
         >
           <ChatContainer />
         </main>
